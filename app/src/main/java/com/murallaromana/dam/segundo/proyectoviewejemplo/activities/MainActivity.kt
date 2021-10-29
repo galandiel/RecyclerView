@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.murallaromana.dam.segundo.proyectoviewejemplo.R
+import com.murallaromana.dam.segundo.proyectoviewejemplo.adapters.ListaPersonajesAdapter
 import com.murallaromana.dam.segundo.proyectoviewejemplo.databinding.ActivityMainBinding
+import com.murallaromana.dam.segundo.proyectoviewejemplo.model.dao.PersonajesDao
+import com.murallaromana.dam.segundo.proyectoviewejemplo.model.dao.PersonajesDaoMockImpl
 import com.murallaromana.dam.segundo.proyectoviewejemplo.model.entities.Personaje
 
 class MainActivity : AppCompatActivity() {
@@ -14,17 +17,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Inflo las vistas
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // LayoutManager layoutManager = new LinearLayoutManager(this)
-        // En lugar de LinearLayoutManaget también hay GridLayoutManager
-        val layoutManager = LinearLayoutManager(this)
+        // Obtengo los datos de los personajes
+        val personajesDao = PersonajesDaoMockImpl()
+        val listaPersonajes = personajesDao.getAll()
 
-        //Prueba personaje
-        val p = Personaje(0, "Daenerys", "Targaryen", "Mother of Dragons", "House Targaryen", "https://thronesapi.com/assets/images/daenerys.jpg")
-        println(p.getNombreCompleto())
-        println(p.getNombreCompleto2())
-        println(p.getNombreCompleto3())
+        // Creo los componentes que necesita el RecyclerView
+        // LayoutManager layoutManager = new LinearLayoutManager(this)
+        // En lugar de LinearLayoutManager también hay GridLayoutManager
+        val layoutManager = LinearLayoutManager(this)
+        val adapter = ListaPersonajesAdapter(listaPersonajes)
+
+        // Asocio el RecyclerView con sus componentes
+        binding.rvListaPersonajes.adapter = adapter
+        binding.rvListaPersonajes.layoutManager = layoutManager
     }
 }
